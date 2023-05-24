@@ -18,13 +18,7 @@ defmodule AshAdmin.PageLive do
   end
 
   @impl true
-  def mount(
-        _params,
-        %{
-          "prefix" => prefix
-        } = session,
-        socket
-      ) do
+  def mount(_params, %{"prefix" => prefix} = session, socket) do
     otp_app = socket.endpoint.config(:otp_app)
 
     prefix =
