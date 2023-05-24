@@ -5,9 +5,8 @@ end
 
 defmodule AshAdmin.PageLive do
   @moduledoc false
-  use Phoenix.LiveView
+  use AshAdmin.Web, :live_view
   import Surface
-  import AshAdmin.Helpers
   require Ash.Query
   alias AshAdmin.Components.{Resource, TopNav}
 

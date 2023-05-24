@@ -10,8 +10,6 @@ defmodule AshAdmin.Web do
         namespace: Phoenix.LiveDashboard,
         root: "lib/ash_admin/templates"
 
-      import AshAdmin.Helpers
-
       unquote(view_helpers())
     end
   end
@@ -21,7 +19,7 @@ defmodule AshAdmin.Web do
     quote do
       @moduledoc false
       use Phoenix.LiveView
-      import AshAdmin.Helpers
+
       unquote(view_helpers())
     end
   end
@@ -31,7 +29,7 @@ defmodule AshAdmin.Web do
     quote do
       @moduledoc false
       use Phoenix.LiveComponent
-      import AshAdmin.Helpers
+
       unquote(view_helpers())
     end
   end
@@ -41,6 +39,8 @@ defmodule AshAdmin.Web do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
+      import AshAdmin.Helpers
+
       case Code.ensure_compiled(Phoenix.Component) do
         {:module, _} ->
           import Phoenix.Component
@@ -49,8 +49,6 @@ defmodule AshAdmin.Web do
           # Import convenience functions for LiveView rendering
           import Phoenix.LiveView.Helpers
       end
-
-      import AshAdmin.Helpers
     end
   end
 
