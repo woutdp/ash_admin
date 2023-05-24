@@ -5,10 +5,7 @@ defmodule AshAdmin.Web do
   def view do
     quote do
       @moduledoc false
-
-      use Phoenix.Template,
-        namespace: Phoenix.LiveDashboard,
-        root: "lib/ash_admin/templates"
+      use Phoenix.Template, root: "lib/ash_admin/templates"
 
       unquote(view_helpers())
     end
