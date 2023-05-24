@@ -12,7 +12,7 @@ defmodule AshAdmin.MixProject do
       app: :ash_admin,
       version: @version,
       description: @description,
-      elixir: "~> 1.10",
+      elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
       docs: docs(),
