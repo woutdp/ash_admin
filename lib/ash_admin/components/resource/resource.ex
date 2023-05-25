@@ -30,7 +30,7 @@ defmodule AshAdmin.Components.Resource do
 
   def render(assigns) do
     ~F"""
-    <div class="content-center">
+    <div class="grow overflow-y-auto">
       <Nav
         resource={@resource}
         api={@api}

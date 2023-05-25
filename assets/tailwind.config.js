@@ -5,6 +5,7 @@ module.exports = {
     '../lib/**/*.ex',
     '../lib/**/*.leex',
     '../lib/**/*.eex',
+    '../lib/**/*.heex',
     './js/**/*.js'
   ],
   theme: {

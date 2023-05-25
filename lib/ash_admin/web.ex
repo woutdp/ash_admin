@@ -15,7 +15,7 @@ defmodule AshAdmin.Web do
   def live_view do
     quote do
       @moduledoc false
-      use Phoenix.LiveView
+      use Phoenix.LiveView, layout: {AshAdmin.LayoutView, :app}
 
       unquote(view_helpers())
     end
