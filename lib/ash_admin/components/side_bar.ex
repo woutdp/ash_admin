@@ -1,0 +1,221 @@
+defmodule AshAdmin.Components.SideBar do
+  @moduledoc false
+
+  use Phoenix.Component
+
+  attr :apis, :any, required: true
+  attr :prefix, :any, required: true
+
+  def sidebar(assigns) do
+    ~H"""
+    <div class="absolute md:static h-full z-[600]">
+      <nav
+        class="hidden md:flex w-[17rem] h-full py-2 md:py-5 bg-gray-800 text-white flex-col gap-4 overflow-y-auto justify-between pl-2"
+        aria-label="sidebar"
+      >
+        <div class="flex flex-col gap-4">
+          <.link href={"/"} class="text-2xl font-bold mb-4">Admin</.link>
+          <%= for api <- @apis do %>
+            <ul>
+              <li class="text-xl font-semibold"><%= AshAdmin.Api.name(api) %></li>
+              <ul>
+                <%= for resource <- Ash.Api.Info.resources(api) do %>
+                  <li>
+                    <a href={"#{@prefix}?api=#{AshAdmin.Api.name(api)}&resource=#{AshAdmin.Resource.name(resource)}"} class="hover:underline">
+                      <%= AshAdmin.Resource.name(resource) %>
+                    </a>
+                  </li>
+                <% end %>
+              </ul>
+            </ul>
+          <% end %>
+        </div>
+        <div>
+          Set User
+        </div>
+      </nav>
+    </div>
+    """
+  end
+
+  # use Surface.LiveComponent
+  # alias AshAdmin.Components.TopNav.{ActorSelect, DrawerDropdown, Dropdown, TenantForm}
+  # alias Surface.Components.LiveRedirect
+  #
+  # data(nav_collapsed, :boolean, default: true)
+  # data(open, :boolean, default: false)
+  #
+  # prop(api, :any, required: true)
+  # prop(resource, :any, required: true)
+  # prop(actor_resources, :any, required: true)
+  # prop(apis, :any, required: true)
+  # prop(tenant, :any, required: true)
+  # prop(clear_tenant, :event)
+  # prop(set_tenant, :event)
+  # prop(toggle_authorizing, :event, required: true)
+  # prop(toggle_actor_paused, :event, required: true)
+  # prop(clear_actor, :event, required: true)
+  # prop(authorizing, :boolean, required: true)
+  # prop(actor_paused, :boolean, required: true)
+  # prop(actor, :any, required: true)
+  # prop(actor_api, :any, required: true)
+  # prop(prefix, :any, required: true)
+  #
+  # def render(assigns) do
+  #   ~F"""
+  #   <nav phx-keydown="close" phx-key="escape" class="bg-gray-800" phx-target={@myself}>
+  #     <div class="px-4 sm:px-6 lg:px-8">
+  #       <div class="flex items-center justify-between h-16">
+  #         <div class="flex items-center w-full">
+  #           <div class="flex-shrink-0">
+  #             <h3 class="text-white text-lg">
+  #               <LiveRedirect to={@prefix}>
+  #                 Admin
+  #               </LiveRedirect>
+  #             </h3>
+  #           </div>
+  #           <div class="hidden md:block w-full">
+  #             <div class="flex justify-between">
+  #               <div class="ml-10 flex items-center">
+  #                 {#for api <- @apis}
+  #                   <Dropdown
+  #                     active={api == @api}
+  #                     class="mr-1"
+  #                     id={AshAdmin.Api.name(api) <> "_api_nav"}
+  #                     name={AshAdmin.Api.name(api)}
+  #                     groups={dropdown_groups(@prefix, @resource, api)}
+  #                     group_labels={dropdown_group_labels(api)}
+  #                   />
+  #                 {/for}
+  #               </div>
+  #               <div class="ml-10 flex items-center">
+  #                 <ActorSelect
+  #                   :if={@actor_resources != []}
+  #                   actor_resources={@actor_resources}
+  #                   authorizing={@authorizing}
+  #                   actor_paused={@actor_paused}
+  #                   actor={@actor}
+  #                   toggle_authorizing={@toggle_authorizing}
+  #                   toggle_actor_paused={@toggle_actor_paused}
+  #                   clear_actor={@clear_actor}
+  #                   actor_api={@actor_api}
+  #                   api={@api}
+  #                   prefix={@prefix}
+  #                 />
+  #                 <TenantForm
+  #                   :if={show_tenant_form?(@apis)}
+  #                   tenant={@tenant}
+  #                   id="tenant_editor"
+  #                   set_tenant={@set_tenant}
+  #                   clear_tenant={@clear_tenant}
+  #                 />
+  #               </div>
+  #             </div>
+  #           </div>
+  #         </div>
+  #         <div class="-mr-2 flex md:hidden">
+  #           <button
+  #             phx-click="toggle"
+  #             phx-target={@myself}
+  #             class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white"
+  #           >
+  #             <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+  #               <path
+  #                 class={"inline-flex": !@open, hidden: @open}
+  #                 stroke-linecap="round"
+  #                 stroke-linejoin="round"
+  #                 stroke-width="2"
+  #                 d="M4 6h16M4 12h16M4 18h16"
+  #               />
+  #               <path
+  #                 class={hidden: !@open, "inline-flex": @open}
+  #                 stroke-linecap="round"
+  #                 stroke-linejoin="round"
+  #                 stroke-width="2"
+  #                 d="M6 18L18 6M6 6l12 12"
+  #               />
+  #             </svg>
+  #           </button>
+  #         </div>
+  #       </div>
+  #     </div>
+  #     <div :if={@open} class="md:hidden" x-cloak>
+  #       <div class="relative px-2 pt-2 pb-3 sm:px-3">
+  #         <div class="block px-4 py-2 text-sm">
+  #           <ActorSelect
+  #             :if={@actor_resources != []}
+  #             actor_resources={@actor_resources}
+  #             authorizing={@authorizing}
+  #             actor_paused={@actor_paused}
+  #             actor={@actor}
+  #             toggle_authorizing={@toggle_authorizing}
+  #             toggle_actor_paused={@toggle_actor_paused}
+  #             clear_actor={@clear_actor}
+  #             actor_api={@actor_api}
+  #             api={@api}
+  #             prefix={@prefix}
+  #           />
+  #         </div>
+  #         <div class="block px-4 py-2 text-sm">
+  #           <TenantForm
+  #             :if={show_tenant_form?(@apis)}
+  #             tenant={@tenant}
+  #             id="tenant_editor_drawer"
+  #             set_tenant={@set_tenant}
+  #             clear_tenant={@clear_tenant}
+  #           />
+  #         </div>
+  #         <DrawerDropdown
+  #           :for={api <- @apis}
+  #           id={AshAdmin.Api.name(api) <> "_api_nav_drawer"}
+  #           name={AshAdmin.Api.name(api)}
+  #           groups={dropdown_groups(@prefix, @resource, api)}
+  #           group_labels={dropdown_group_labels(api)}
+  #         />
+  #       </div>
+  #     </div>
+  #   </nav>
+  #   """
+  # end
+  #
+  # defp dropdown_groups(prefix, current_resource, api) do
+  #   for resource <- Ash.Api.Info.resources(api) do
+  #     %{
+  #       text: AshAdmin.Resource.name(resource),
+  #       to:
+  #         "#{prefix}?api=#{AshAdmin.Api.name(api)}&resource=#{AshAdmin.Resource.name(resource)}",
+  #       active: resource == current_resource,
+  #       group: AshAdmin.Resource.resource_group(resource)
+  #     }
+  #   end
+  #   |> Enum.group_by(fn resource -> resource.group end)
+  #   |> Enum.sort_by(fn {label, _items} -> label || "_____always_put_me_last" end)
+  #   |> Keyword.values()
+  # end
+  #
+  # defp dropdown_group_labels(api) do
+  #   AshAdmin.Api.resource_group_labels(api)
+  # end
+  #
+  # def handle_event("collapse_nav", _, socket) do
+  #   {:noreply, assign(socket, :nav_collapsed, !socket.assigns.nav_collapsed)}
+  # end
+  #
+  # def handle_event("close", _, socket) do
+  #   {:noreply, assign(socket, :open, false)}
+  # end
+  #
+  # def handle_event("toggle", _, socket) do
+  #   {:noreply, assign(socket, :open, !socket.assigns.open)}
+  # end
+  #
+  # defp show_tenant_form?(apis) do
+  #   Enum.any?(apis, fn api ->
+  #     api
+  #     |> Ash.Api.Info.resources()
+  #     |> Enum.any?(fn resource ->
+  #       Ash.Resource.Info.multitenancy_strategy(resource)
+  #     end)
+  #   end)
+  # end
+end

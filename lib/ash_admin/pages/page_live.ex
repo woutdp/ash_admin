@@ -6,7 +6,10 @@ end
 defmodule AshAdmin.PageLive do
   @moduledoc false
   use AshAdmin.Web, :live_view
+
   import Surface
+  import AshAdmin.Components.SideBar
+
   require Ash.Query
   alias AshAdmin.Components.{Resource, TopNav}
 
@@ -63,22 +66,8 @@ defmodule AshAdmin.PageLive do
   @impl true
   def render(assigns) do
     ~F"""
-    <TopNav
-      id="top_nav"
+    <.sidebar
       apis={@apis}
-      api={@api}
-      actor_api={@actor_api}
-      resource={@resource}
-      tenant={@tenant}
-      actor_resources={@actor_resources}
-      authorizing={@authorizing}
-      actor_paused={@actor_paused}
-      actor={@actor}
-      set_tenant="set_tenant"
-      clear_tenant="clear_tenant"
-      toggle_authorizing="toggle_authorizing"
-      toggle_actor_paused="toggle_actor_paused"
-      clear_actor="clear_actor"
       prefix={@prefix}
     />
     <Resource
@@ -100,6 +89,24 @@ defmodule AshAdmin.PageLive do
       table={@table}
       tables={@tables}
       polymorphic_actions={@polymorphic_actions}
+      prefix={@prefix}
+    />
+    <TopNav
+      id="top_nav"
+      apis={@apis}
+      api={@api}
+      actor_api={@actor_api}
+      resource={@resource}
+      tenant={@tenant}
+      actor_resources={@actor_resources}
+      authorizing={@authorizing}
+      actor_paused={@actor_paused}
+      actor={@actor}
+      set_tenant="set_tenant"
+      clear_tenant="clear_tenant"
+      toggle_authorizing="toggle_authorizing"
+      toggle_actor_paused="toggle_actor_paused"
+      clear_actor="clear_actor"
       prefix={@prefix}
     />
     """
